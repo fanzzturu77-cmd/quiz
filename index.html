@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Demokrasi Challenge - Think Smart, Choose Fair, Build Democracy</title>
+    <!-- Google Fonts: Plus Jakarta Sans & Outfit for modern, punchy UI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Main Clean App Viewport (Mobile Responsive Edge-to-Edge) -->
+    <main class="app-root" id="appRoot">
+        <div class="app-container" id="appContainer">
+            
+            <!-- Mobile Clean Screen Surface -->
+            <div class="screen-surface" id="screenSurface">
+
+                <!-- Scrollable Mobile App Body -->
+                <div class="mobile-scroll-container" id="scrollContainer">
+                    
+                    <!-- ================= HERO SECTION (Clean & Elevated - Banner Removed as Requested) ================= -->
+                    <section class="hero-section" id="heroSection">
+                        <!-- Top Navigation / HUD Bar inside App -->
+                        <div class="hero-hud">
+                            <!-- Left: Player Profile Pill & Level -->
+                            <div class="hud-pill pill-profile" id="pillProfile" title="Profil Pemain">
+                                <div class="profile-avatar-circle" id="hudAvatarCircle">
+                                    <span id="hudAvatarIcon">🎓</span>
+                                </div>
+                                <div class="profile-info-wrap">
+                                    <span class="profile-name-text" id="hudPlayerName">Pemain Baru</span>
+                                    <div class="level-track-wrap">
+                                        <div class="level-track">
+                                            <div class="level-progress-bar" style="width: 0%;"></div>
+                                        </div>
+                                        <span class="level-sub-tag">Lvl 1</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right: Coins, Sound, & Language -->
+                            <div class="hud-right-group">
+                                <!-- Coins Pill -->
+                                <div class="hud-pill pill-coin" id="pillCoins" title="Democracy Points">
+                                    <div class="gold-coin-mini">
+                                        <span>$</span>
+                                    </div>
+                                    <span class="coin-value" id="userCoins">0</span>
+                                </div>
+
+                                <!-- Sound Toggle Pill -->
+                                <button type="button" class="hud-pill pill-sound" id="btnSoundToggle" title="Nyalakan/Matikan Suara">
+                                    <span id="soundIcon">🔊</span>
+                                </button>
+
+                                <!-- Onboarding Re-open Button -->
+                                <button type="button" class="hud-pill pill-sound" id="btnOpenOnboarding" title="Buka Panduan & Onboarding">
+                                    <span>💡</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Hero spacer for clean view (Badge banner removed as instructed) -->
+                        <div class="hero-clean-spacer"></div>
+                    </section>
+
+                    <!-- ================= MAIN CONTENT BODY ================= -->
+                    <div class="content-body">
+
+                        <!-- Welcome Introduction Banner -->
+                        <div class="welcome-banner-card">
+                            <div class="welcome-icon-bubble">🏛️</div>
+                            <div class="welcome-text">
+                                <p class="welcome-desc">
+                                    Selamat datang di <strong>Demokrasi Challenge!</strong> Uji pengetahuanmu tentang demokrasi, hak asasi manusia, keadilan, dan kehidupan bernegara melalui kuis interaktif yang seru dan berbobot.
+                                </p>
+                                <div class="welcome-ready">
+                                    <span class="ready-sparkle">✨</span>
+                                    <strong>Siap menguji wawasanmu?</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FLOATING DAILY QUEST / TANTANGANMU CARD -->
+                        <div class="quest-floating-card">
+                            <div class="quest-card-header">
+                                <div class="quest-icon-box">
+                                    <img src="images/quest_icon.webp" alt="Tantanganmu" class="quest-3d-icon" loading="eager">
+                                </div>
+                                <div class="quest-info">
+                                    <div class="quest-number">10 Soal</div>
+                                    <div class="quest-sub">Tantangan Demokrasi</div>
+                                </div>
+                                <button type="button" class="quest-menu-btn" id="btnQuestInfo" aria-label="Detail Tantangan" title="Detail Tantangan">
+                                    <span>&bull;&bull;&bull;</span>
+                                </button>
+                            </div>
+
+                            <div class="quest-meta-chips">
+                                <span class="meta-chip chip-topic">📚 5 Topik Demokrasi</span>
+                                <span class="meta-chip chip-diff">⚡ 3 Nyawa (Lives)</span>
+                                <span class="meta-chip chip-time">⏱️ 15 Detik/Soal</span>
+                            </div>
+
+                            <!-- ================= FORM IDENTITAS PEMAIN ================= -->
+                            <div class="player-identity-box" id="playerIdentityBox">
+                                <div class="identity-header">
+                                    <div class="identity-badge-icon">🪪</div>
+                                    <div class="identity-header-text">
+                                        <h3 class="identity-title">Identitas Peserta Kuis</h3>
+                                        <p class="identity-subtitle">Isi nama & nomor absenmu sebelum bertanding</p>
+                                    </div>
+                                </div>
+
+                                <div class="identity-inputs-grid">
+                                    <!-- Nama Pemain -->
+                                    <div class="input-field-group">
+                                        <label for="inputPlayerName" class="field-label">
+                                            <span>Nama Pemain / Siswa</span>
+                                            <span class="required-star">*</span>
+                                        </label>
+                                        <div class="input-control-wrap">
+                                            <span class="input-icon">👤</span>
+                                            <input 
+                                                type="text" 
+                                                id="inputPlayerName" 
+                                                class="custom-text-input" 
+                                                placeholder="Contoh: Muhammad Zackly" 
+                                                maxlength="30"
+                                                autocomplete="name"
+                                            >
+                                        </div>
+                                    </div>
+
+                                    <!-- Nomor Absen -->
+                                    <div class="input-field-group absen-group">
+                                        <label for="inputPlayerAbsen" class="field-label">
+                                            <span>No. Absen</span>
+                                            <span class="required-star">*</span>
+                                        </label>
+                                        <div class="input-control-wrap">
+                                            <span class="input-icon">🔢</span>
+                                            <input 
+                                                type="number" 
+                                                id="inputPlayerAbsen" 
+                                                class="custom-text-input" 
+                                                placeholder="14" 
+                                                min="1" 
+                                                max="99"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Dynamic Feedback Greeting -->
+                                <div class="player-greeting-bar" id="playerGreetingBar">
+                                    <span class="greeting-icon">🇮🇩</span>
+                                    <span class="greeting-msg" id="greetingMessage">Siapkan dirimu menjadi generasi demokratis yang berintegritas!</span>
+                                </div>
+                            </div>
+
+                            <!-- Primary Game Action Buttons -->
+                            <div class="action-buttons-group">
+                                <button type="button" class="btn-play-primary" id="btnStartGame">
+                                    <div class="play-btn-glow"></div>
+                                    <div class="play-btn-content">
+                                        <span class="play-icon">▶</span>
+                                        <span class="play-text">MULAI BERMAIN</span>
+                                    </div>
+                                </button>
+
+                                <div class="secondary-btn-row">
+                                    <button type="button" class="btn-secondary" id="btnSelectLevel">
+                                        <span class="btn-sec-icon">🗺️</span>
+                                        <span>PILIH LEVEL</span>
+                                    </button>
+                                    <button type="button" class="btn-secondary" id="btnLeaderboard">
+                                        <span class="btn-sec-icon">🏆</span>
+                                        <span>PAPAN SKOR</span>
+                                    </button>
+                                    <button type="button" class="btn-secondary" id="btnInstructions">
+                                        <span class="btn-sec-icon">📖</span>
+                                        <span>PETUNJUK</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ================= SECTION: TODAY'S FUN ================= -->
+                        <section class="section-container" id="todaysFunSection">
+                            <div class="section-heading-wrap">
+                                <h2 class="section-title">Statistik Saya</h2>
+                                <span class="section-sub-badge">Data Realtime</span>
+                            </div>
+
+                            <div class="todays-fun-grid">
+                                <div class="fun-card fun-card-left" id="cardTopicStats">
+                                    <div class="fun-card-icon-container">
+                                        <img src="images/book_icon.webp" alt="Topik Demokrasi" class="fun-3d-icon" loading="lazy">
+                                    </div>
+                                    <div class="fun-card-data">
+                                        <div class="fun-number">0 Benar</div>
+                                        <div class="fun-label">Total Jawaban Benar</div>
+                                    </div>
+                                </div>
+
+                                <div class="fun-card fun-card-right" id="cardTimeStats">
+                                    <div class="fun-card-icon-container">
+                                        <img src="images/clock_icon.webp" alt="Waktu Kuis" class="fun-3d-icon" loading="lazy">
+                                    </div>
+                                    <div class="fun-card-data">
+                                        <div class="fun-number">0 Detik</div>
+                                        <div class="fun-label">Total Waktu Belajar</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================= SECTION: BELAJAR DEMOKRASI ================= -->
+                        <section class="section-container" id="democracyEducationSection">
+                            <div class="section-heading-wrap">
+                                <h2 class="section-title">Belajar Demokrasi, Mulai dari Diri Sendiri</h2>
+                            </div>
+                            <div class="democracy-quote-card">
+                                <div class="quote-line"></div>
+                                <p class="democracy-quote-text">
+                                    Pahami hak dan kewajiban, hargai perbedaan pendapat, serta bangun sikap adil dan bertanggung jawab sebagai warga negara.
+                                </p>
+                                <div class="motto-ribbon">
+                                    <span class="motto-badge-icon">🇮🇩</span>
+                                    <span class="motto-bold">Berani Berpikir, Bijak Memilih, Siap Berdemokrasi!</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================= SECTION: MY BADGES ================= -->
+                        <section class="section-container" id="badgesSection">
+                            <div class="section-heading-wrap">
+                                <h2 class="section-title">My Badges</h2>
+                                <span class="badges-count-chip">0/8 Terbuka</span>
+                            </div>
+
+                            <div class="badges-grid" id="badgesGrid">
+                                <!-- Populated dynamically by JavaScript -->
+                            </div>
+                        </section>
+
+                        <!-- Footer Space -->
+                        <footer class="app-footer">
+                            <p class="footer-copy">&copy; 2026 Demokrasi Challenge &bull; Warga Cerdas, Bangsa Kuat</p>
+                            <div class="footer-home-indicator"></div>
+                        </footer>
+
+                    </div> <!-- End Content Body -->
+                </div> <!-- End Mobile Scroll Container -->
+
+                <!-- ================= MODAL / SCREEN: INTERACTIVE QUIZ (EXACT MATCH TO PHOTO 3) ================= -->
+                <div class="quiz-overlay" id="quizOverlay" aria-hidden="true">
+                    <div class="quiz-modal-container sky-quiz-theme">
+                        
+                        <!-- Top HUD Bar: Clock on Left, Lives on Right (Matches Photo 3) -->
+                        <div class="sky-quiz-top-bar">
+                            <!-- Left: Clock Timer Pill -->
+                            <div class="sky-timer-pill" id="skyTimerPill">
+                                <span class="sky-timer-icon">⏰</span>
+                                <span class="sky-timer-text" id="quizTimerVal">00:30</span>
+                            </div>
+
+                            <!-- Center: Exit Button Mini -->
+                            <button type="button" class="sky-exit-btn" id="btnExitQuiz" aria-label="Keluar Kuis" title="Keluar">✕</button>
+
+                            <!-- Right: Lives / Heart Pill (3 Hearts) -->
+                            <div class="sky-lives-pill" id="skyLivesPill" title="Nyawa Tersisa">
+                                <span class="heart-icon active" id="heart1">❤️</span>
+                                <span class="heart-icon active" id="heart2">❤️</span>
+                                <span class="heart-icon inactive" id="heart3">🤍</span>
+                            </div>
+                        </div>
+
+                        <!-- Top Question Card (Clean White Rounded Box, Matches Photo 3) -->
+                        <div class="sky-question-card">
+                            <div class="sky-quest-category" id="quizTopicPill">Demokrasi Quest</div>
+                            <h2 class="sky-question-title" id="quizQuestionTitle">
+                                Pertanyaan kuis kebangsaan sedang dimuat...
+                            </h2>
+                            <div class="sky-question-meta">
+                                <span class="sky-step-chip" id="quizStepText">Soal 1 / 10</span>
+                                <span class="sky-diff-chip" id="quizDiffPill">Mudah</span>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Options Card (Vibrant Blue Container, Matches Photo 3) -->
+                        <div class="sky-options-container">
+                            <div class="sky-options-header">
+                                <span class="sky-options-instruction">Pilih satu jawaban</span>
+                                <div class="sky-streak-mini hidden" id="quizStreakPill">
+                                    <span>🔥 Streak x<span id="quizStreakCount">1</span></span>
+                                </div>
+                            </div>
+
+                            <!-- Options List (A, B, C, D with Sound Speaker Button) -->
+                            <div class="sky-options-list" id="quizOptionsList">
+                                <!-- Injected dynamically by JS matching Photo 3 -->
+                            </div>
+
+                            <!-- Explanation Feedback Bubble (Shown upon answer) -->
+                            <div class="sky-feedback-bubble hidden" id="quizFeedbackBox">
+                                <div class="sky-feedback-title" id="feedbackBadge">🎉 Jawaban Benar!</div>
+                                <p class="sky-feedback-desc" id="feedbackText">Penjelasan jawaban.</p>
+                            </div>
+
+                            <!-- Big Navy Submit Button (Matches Photo 3) -->
+                            <button type="button" class="sky-submit-btn" id="btnSubmitAnswer">
+                                KIRIM JAWABAN
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ================= MODAL / SCREEN: QUIZ RESULT (EXACT MATCH TO PHOTO 1) ================= -->
+                <div class="result-overlay hidden" id="resultOverlay">
+                    <div class="result-page-container">
+                        
+                        <!-- Top Celebration Header (Bahasa Indonesia) -->
+                        <div class="result-top-banner">
+                            <h1 class="result-celebrate-title">
+                                Bagikan prestasimu dan teruslah belajar untuk masa depan!
+                            </h1>
+                        </div>
+
+                        <!-- Main Sky Card (Bahasa Indonesia) -->
+                        <div class="result-sky-card">
+                            
+                            <!-- 3D Penguin Mascot inside Golden Leaf Medal -->
+                            <div class="penguin-mascot-showcase">
+                                <div class="mascot-sparkle-ambient"></div>
+                                <img src="images/penguin_mascot.webp" alt="Penguin Champion" class="penguin-img" id="resultPenguinImg">
+                            </div>
+
+                            <!-- Big Catchy Headline (Bahasa Indonesia) -->
+                            <h2 class="result-headline-bold" id="resultHeadlineBold">
+                                Selesaikan kuis untuk melihat hasilmu!
+                            </h2>
+
+                            <!-- 4-Box Stats Grid (Bahasa Indonesia) -->
+                            <div class="result-stats-4grid">
+                                
+                                <!-- Box 1: Peringkat Teratas (Purple Icon) -->
+                                <div class="result-metric-card">
+                                    <div class="metric-top-row">
+                                        <span class="metric-icon purple-chart">📊</span>
+                                        <span class="metric-number" id="resultTopRankVal">—</span>
+                                    </div>
+                                    <div class="metric-label">Peringkat Teratas</div>
+                                </div>
+
+                                <!-- Box 2: Streak Terbaik (Fire Icon) -->
+                                <div class="result-metric-card">
+                                    <div class="metric-top-row">
+                                        <span class="metric-icon orange-flame">🔥</span>
+                                        <span class="metric-number" id="resultBestStreakVal">0</span>
+                                    </div>
+                                    <div class="metric-label">Streak Terbaik</div>
+                                </div>
+
+                                <!-- Box 3: Total XP (Lightning Icon) -->
+                                <div class="result-metric-card">
+                                    <div class="metric-top-row">
+                                        <span class="metric-icon yellow-bolt">⚡</span>
+                                        <span class="metric-number" id="resultXpEarnedVal">0</span>
+                                    </div>
+                                    <div class="metric-label">Total XP</div>
+                                </div>
+
+                                <!-- Box 4: Waktu Belajar (Clock Icon) -->
+                                <div class="result-metric-card">
+                                    <div class="metric-top-row">
+                                        <span class="metric-icon blue-clock">⏰</span>
+                                        <span class="metric-number" id="resultLearningTimeVal">0d</span>
+                                    </div>
+                                    <div class="metric-label">Waktu Belajar</div>
+                                </div>
+
+                            </div>
+
+                            <!-- Badge Showcase Card inside Result -->
+                            <div class="result-badge-earned-box" id="resultBadgeEarnedBox">
+                                <div class="result-badge-img-wrap">
+                                    <img src="images/badges/badge_1.webp" alt="Lencana Level" id="resultBadgeImg" class="result-badge-img">
+                                </div>
+                                <div class="result-badge-details">
+                                    <div class="result-badge-level-chip" id="resultBadgeLevelChip">Level 1 — Penjelajah Demokrasi</div>
+                                    <div class="result-badge-status-title" id="resultBadgeStatusTitle">🎉 LULUS & MERAIH LENCANA!</div>
+                                    <div class="result-badge-score-pill" id="resultBadgeScorePill">Skor: 90/100 (Syarat: Min. 80 Poin)</div>
+                                </div>
+                            </div>
+
+                            <!-- Student Info Tag inside Card -->
+                            <div class="result-student-tag">
+                                <span class="student-avatar-mini">🎓</span>
+                                <span class="student-name-text" id="resultStudentName">Pemain Baru</span>
+                                <span class="student-dot">&bull;</span>
+                                <span class="student-absen-text" id="resultStudentAbsen">No. Absen: 14</span>
+                            </div>
+
+                            <!-- Journey Date Footer (Bahasa Indonesia) -->
+                            <div class="result-journey-date" id="resultJourneyDate">
+                                Perjalanan Demokrasimu per 25 Oktober 2026
+                            </div>
+
+                        </div>
+
+                        <!-- Action Buttons in Result Screen -->
+                        <div class="result-bottom-action">
+                            <button type="button" class="btn-play-primary result-next-level-btn hidden" id="btnResultNextLevel">
+                                <div class="play-btn-glow"></div>
+                                <div class="play-btn-content">
+                                    <span class="play-icon">▶</span>
+                                    <span class="play-text" id="btnResultNextLevelText">LANJUT LEVEL BERIKUTNYA</span>
+                                </div>
+                            </button>
+                            <button type="button" class="btn-share-results" id="btnShareResults">
+                                BAGIKAN HASIL KUIS 📤
+                            </button>
+                            <div class="result-secondary-row">
+                                <button type="button" class="btn-result-action-sub" id="btnResultReplay">
+                                    <span>🔄 Ulangi Level</span>
+                                </button>
+                                <button type="button" class="btn-result-action-sub" id="btnResultChooseLevel">
+                                    <span>🗺️ Pilih Level</span>
+                                </button>
+                                <button type="button" class="btn-result-action-sub" id="btnResultClose">
+                                    <span>🏠 Ke Beranda</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ================= FULLSCREEN WHITE ONBOARDING WELCOME SCREEN ================= -->
+                <div class="welcome-onboarding-screen" id="welcomeOnboardingScreen">
+                    <div class="welcome-white-canvas">
+                        
+                        <!-- Top Nav Bar -->
+                        <div class="welcome-top-nav">
+                            <span class="welcome-brand-chip">🏛️ DEMOKRASI CHALLENGE</span>
+                            <button type="button" class="welcome-skip-btn" id="btnSkipWelcome">Lewati ✕</button>
+                        </div>
+
+                        <!-- Central Split Stage: Penguin in Center slides LEFT, Words emerge from penguin to the RIGHT -->
+                        <div class="welcome-split-stage" id="welcomeSplitStage">
+                            
+                            <!-- Penguin Mascot (Starts at center, animates smoothly to the LEFT) -->
+                            <div class="welcome-penguin-actor" id="welcomePenguinActor">
+                                <div class="welcome-penguin-halo"></div>
+                                <img src="images/penguin_mascot.webp" alt="Pingu Maskot Demokrasi" class="welcome-penguin-img" id="welcomeMascotImg">
+                            </div>
+
+                            <!-- Words / Greeting Speech Box (Emerges from inside penguin to the RIGHT) -->
+                            <div class="welcome-words-actor" id="welcomeWordsActor">
+                                <div class="speech-tail-pointer"></div>
+                                <div class="words-inner-box">
+                                    <div class="welcome-greeting-badge">
+                                        <span class="badge-dot"></span>
+                                        <span>Pingu Menyapa! 👋</span>
+                                    </div>
+                                    <h1 class="welcome-main-title">
+                                        Selamat Datang!
+                                    </h1>
+                                    <p class="welcome-main-desc">
+                                        Yuk uji wawasan kebangsaanmu bersama <strong>Pingu</strong> di kuis demokrasi interaktif. Jawab benar & raih peringkat teratas!
+                                    </p>
+                                    <button type="button" class="btn-welcome-start" id="btnEnterApp">
+                                        <span>Mulai Petualangan 🚀</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Feature Highlights Pills -->
+                        <div class="welcome-feature-pills">
+                            <div class="welcome-pill">
+                                <span class="pill-icon">⏱️</span>
+                                <span class="pill-text">10 Soal Pilihan</span>
+                            </div>
+                            <div class="welcome-pill">
+                                <span class="pill-icon">❤️</span>
+                                <span class="pill-text">3 Nyawa</span>
+                            </div>
+                            <div class="welcome-pill">
+                                <span class="pill-icon">🏆</span>
+                                <span class="pill-text">Top 0.1%</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ================= MODAL: PETUNJUK PERMAINAN ================= -->
+                <div class="sheet-backdrop hidden" id="instructionModal">
+                    <div class="sheet-modal">
+                        <div class="sheet-handle"></div>
+                        <div class="sheet-header">
+                            <div class="sheet-title-group">
+                                <span class="sheet-icon">📖</span>
+                                <h3>Petunjuk Permainan</h3>
+                            </div>
+                            <button type="button" class="sheet-close-btn" id="btnCloseInstructions">✕</button>
+                        </div>
+                        <div class="sheet-body">
+                            <div class="guide-item">
+                                <div class="guide-num">1</div>
+                                <div class="guide-desc">
+                                    <strong>Isi Identitas Siswa</strong>
+                                    <p>Tulis nama lengkap dan nomor absenmu di kartu tantangan untuk mencatat rekor realtime.</p>
+                                </div>
+                            </div>
+                            <div class="guide-item">
+                                <div class="guide-num">2</div>
+                                <div class="guide-desc">
+                                    <strong>8 Level &bull; 80 Soal Berjenjang</strong>
+                                    <p>Tiap level memiliki 10 soal dengan tema materi LKS: Demokrasi, HAM, Peradilan Merdeka, Otonomi Daerah, Kemakmuran, dan Keadilan Sosial.</p>
+                                </div>
+                            </div>
+                            <div class="guide-item">
+                                <div class="guide-num">3</div>
+                                <div class="guide-desc">
+                                    <strong>30 Detik per Soal & Auto-Advance</strong>
+                                    <p>Setiap soal berdurasi 30 detik. Klik "Kirim Jawaban" untuk melihat koreksi warna (benar/salah) dan otomatis lanjut ke soal berikutnya.</p>
+                                </div>
+                            </div>
+                            <div class="guide-item">
+                                <div class="guide-num">4</div>
+                                <div class="guide-desc">
+                                    <strong>Syarat Lencana: Minimal 80 Poin</strong>
+                                    <p>Dapatkan minimal 80 poin (8 soal benar) untuk lulus level, membuka Lencana kebanggaan, dan membuka level berikutnya!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sheet-footer">
+                            <button type="button" class="sheet-primary-btn" id="btnStartFromGuide">Mulai Bermain Sekarang</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= MODAL: PILIH LEVEL TANTANGAN (8 LEVEL BADGE) ================= -->
+                <div class="sheet-backdrop hidden" id="levelSelectModal">
+                    <div class="sheet-modal level-select-sheet">
+                        <div class="sheet-handle"></div>
+                        <div class="sheet-header">
+                            <div class="sheet-title-group">
+                                <span class="sheet-icon">🗺️</span>
+                                <h3>Pilih Level Tantangan (1 - 8)</h3>
+                            </div>
+                            <button type="button" class="sheet-close-btn" id="btnCloseLevelSelect">✕</button>
+                        </div>
+                        <div class="sheet-body">
+                            <div class="level-select-info-banner">
+                                <span class="info-icon">⭐</span>
+                                <div class="info-text">
+                                    <strong>8 Level Progresif &bull; 10 Soal per Level</strong>
+                                    <p>Waktu 30 detik per soal. Dapatkan <strong>minimal 80 poin</strong> untuk membuka Lencana dan membuka Level berikutnya!</p>
+                                </div>
+                            </div>
+                            <div class="level-cards-grid" id="levelCardsGrid">
+                                <!-- Populated dynamically by JS -->
+                            </div>
+                        </div>
+                        <div class="sheet-footer">
+                            <button type="button" class="sheet-primary-btn" id="btnLevelSelectClose">Tutup</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= MODAL: PAPAN SKOR (LEADERBOARD) ================= -->
+                <div class="sheet-backdrop hidden" id="leaderboardModal">
+                    <div class="sheet-modal">
+                        <div class="sheet-handle"></div>
+                        <div class="sheet-header">
+                            <div class="sheet-title-group">
+                                <span class="sheet-icon">🏆</span>
+                                <h3>Papan Skor Warga</h3>
+                            </div>
+                            <button type="button" class="sheet-close-btn" id="btnCloseLeaderboard">✕</button>
+                        </div>
+                        <div class="sheet-body">
+                            <div class="leaderboard-list" id="leaderboardList">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                        <div class="sheet-footer">
+                            <button type="button" class="sheet-primary-btn" id="btnLeaderboardClose">Tutup</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= MODAL: DETAIL LENCANA ================= -->
+                <div class="sheet-backdrop hidden" id="badgeModal">
+                    <div class="sheet-modal badge-detail-sheet">
+                        <div class="sheet-handle"></div>
+                        <div class="sheet-header">
+                            <div class="sheet-title-group">
+                                <span class="sheet-icon">🏅</span>
+                                <h3>Detail Lencana</h3>
+                            </div>
+                            <button type="button" class="sheet-close-btn" id="btnCloseBadgeModal">✕</button>
+                        </div>
+                        <div class="sheet-body text-center" id="badgeModalContent">
+                            <!-- Populated dynamically -->
+                        </div>
+                        <div class="sheet-footer">
+                            <button type="button" class="sheet-primary-btn" id="btnBadgeModalDone">Keren!</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toast Notification -->
+                <div class="toast-notification hidden" id="toastNotification">
+                    <span id="toastMessage">Pesan Notifikasi</span>
+                </div>
+
+                <!-- Confetti Canvas -->
+                <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+
+            </div> <!-- End Screen Surface -->
+        </div> <!-- End App Container -->
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/audio.js"></script>
+    <script src="js/quiz-data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
