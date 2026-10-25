@@ -507,31 +507,33 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p class="empty-desc">Papan skor masih kosong! Mainkan kuis dan raih nilai tertinggi!</p>
                 </div>
             `;
-            return;
+        } else {
+            const currentPlayerKey = `${state.playerName.toLowerCase().trim()}_${state.playerAbsen}`;
+            const rankAvatars = ['👑', '⭐', '🔥'];
+            const defaultAvatars = ['🎯', '✨', '🌿', '💎', '🌟', '🎓', '⚡'];
+
+            entries.forEach((entry, idx) => {
+                const rank = idx + 1;
+                const isCurrentUser = entry.key === currentPlayerKey;
+                const avatar = rank <= 3 ? rankAvatars[rank - 1] : defaultAvatars[idx % defaultAvatars.length];
+
+                const row = document.createElement('div');
+                row.className = `leader-item ${isCurrentUser ? 'is-user' : ''}`;
+                row.innerHTML = `
+                    <div class="leader-rank">#${rank}</div>
+                    <div class="leader-avatar">${avatar}</div>
+                    <div class="leader-name-wrap">
+                        <div class="leader-name">${entry.name}${isCurrentUser ? ' (Kamu)' : ''}</div>
+                        <div class="leader-badges">No. Absen: ${entry.absen || '-'} &bull; ${entry.gamesPlayed}x Main</div>
+                    </div>
+                    <div class="leader-score">${entry.score} Poin</div>
+                `;
+                elements.leaderboardList.appendChild(row);
+            });
         }
 
-        const currentPlayerKey = `${state.playerName.toLowerCase().trim()}_${state.playerAbsen}`;
-        const rankAvatars = ['👑', '⭐', '🔥'];
-        const defaultAvatars = ['🎯', '✨', '🌿', '💎', '🌟', '🎓', '⚡'];
-
-        entries.forEach((entry, idx) => {
-            const rank = idx + 1;
-            const isCurrentUser = entry.key === currentPlayerKey;
-            const avatar = rank <= 3 ? rankAvatars[rank - 1] : defaultAvatars[idx % defaultAvatars.length];
-
-            const row = document.createElement('div');
-            row.className = `leader-item ${isCurrentUser ? 'is-user' : ''}`;
-            row.innerHTML = `
-                <div class="leader-rank">#${rank}</div>
-                <div class="leader-avatar">${avatar}</div>
-                <div class="leader-name-wrap">
-                    <div class="leader-name">${entry.name}${isCurrentUser ? ' (Kamu)' : ''}</div>
-                    <div class="leader-badges">No. Absen: ${entry.absen || '-'} &bull; ${entry.gamesPlayed}x Main</div>
-                </div>
-                <div class="leader-score">${entry.score} Poin</div>
-            `;
-            elements.leaderboardList.appendChild(row);
-        });
+        // Silent cloud sync in background to fetch latest scores from other devices
+        realtimeData.syncCloud().catch(e => console.warn('[Leaderboard] Cloud sync error:', e));
     }
 
     // =========================================================================
@@ -876,45 +878,59 @@ document.addEventListener('DOMContentLoaded', () => {
         const now = new Date();
         const namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         const formattedDate = `${now.getDate()} ${namaBulan[now.getMonth()]} ${now.getFullYear()}`;
-        elements.resultJourneyDate.textContent = `Perjalanan Demokrasimu per ${formattedDate}`;
+        if (elements.resultJourneyDate) {
+            elements.resultJourneyDate.innerHTML = `Perjalanan Demokrasimu per ${formattedDate} &bull; ${state.playerName || 'Pemain'} (#${state.playerAbsen || '-'})`;
+        }
 
-        // Populate Student Identity
-        elements.resultStudentName.textContent = state.playerName || 'Pemain Baru';
-        elements.resultStudentAbsen.textContent = `No. Absen: ${state.playerAbsen || '-'}`;
+        // Student Identity fallback (if present in DOM)
+        if (elements.resultStudentName) elements.resultStudentName.textContent = state.playerName || 'Pemain Baru';
+        if (elements.resultStudentAbsen) elements.resultStudentAbsen.textContent = `No. Absen: ${state.playerAbsen || '-'}`;
 
-        // Top Ranking from leaderboard
+        // Top Ranking from realtime leaderboard
         const rankText = realtimeData.getTopRankingPercent(state.playerName, state.playerAbsen);
-        elements.resultTopRankVal.textContent = rankText;
+        if (elements.resultTopRankVal) elements.resultTopRankVal.textContent = rankText;
 
         // Headline & Badge Outcome
-        elements.resultBadgeImg.src = currentLevel.badgeImage;
-        elements.resultBadgeLevelChip.textContent = `Level ${currentLevel.id} — ${currentLevel.shortTitle}`;
+        if (elements.resultBadgeImg) elements.resultBadgeImg.src = currentLevel.badgeImage;
+        if (elements.resultBadgeLevelChip) elements.resultBadgeLevelChip.textContent = `Level ${currentLevel.id} — ${currentLevel.shortTitle}`;
 
         const isPassed = state.score >= 80;
 
         if (isPassed) {
-            elements.resultHeadlineBold.textContent = `Luar Biasa! Kamu Lulus ${currentLevel.shortTitle}! 🎉`;
-            elements.resultBadgeStatusTitle.textContent = `🎉 LULUS & MERAIH LENCANA!`;
-            elements.resultBadgeStatusTitle.style.color = '#059669';
-            elements.resultBadgeScorePill.textContent = `Skor: ${state.score}/100 (${state.correctCount}/10 Benar) • Lencana Tersimpan!`;
+            if (elements.resultHeadlineBold) {
+                elements.resultHeadlineBold.textContent = `Luar Biasa! Kamu Lulus ${currentLevel.shortTitle}! 🎉`;
+            }
+            if (elements.resultBadgeStatusTitle) {
+                elements.resultBadgeStatusTitle.textContent = `🎉 LULUS & MERAIH LENCANA!`;
+                elements.resultBadgeStatusTitle.style.color = '#059669';
+            }
+            if (elements.resultBadgeScorePill) {
+                elements.resultBadgeScorePill.textContent = `Skor: ${state.score}/100 (${state.correctCount}/10 Benar) • Lencana Tersimpan!`;
+            }
 
             // If there's a next level, show next level button
             if (state.currentLevelId < 8) {
-                elements.btnResultNextLevel.classList.remove('hidden');
-                elements.btnResultNextLevelText.textContent = `LANJUT KE LEVEL ${state.currentLevelId + 1} ▶`;
+                if (elements.btnResultNextLevel) elements.btnResultNextLevel.classList.remove('hidden');
+                if (elements.btnResultNextLevelText) elements.btnResultNextLevelText.textContent = `LANJUT KE LEVEL ${state.currentLevelId + 1} ▶`;
             } else {
-                elements.btnResultNextLevel.classList.add('hidden');
+                if (elements.btnResultNextLevel) elements.btnResultNextLevel.classList.add('hidden');
             }
 
             launchConfetti();
             showToast(`🏅 Selamat! Kamu mendapatkan Lencana ${currentLevel.badgeName}!`);
         } else {
-            elements.resultHeadlineBold.textContent = `Tetap Semangat! Belum Lulus (Minimal 80 Poin) 📚`;
-            elements.resultBadgeStatusTitle.textContent = `Belum Lulus (Butuh Min. 80 Poin)`;
-            elements.resultBadgeStatusTitle.style.color = '#dc2626';
-            elements.resultBadgeScorePill.textContent = `Skor: ${state.score}/100 (${state.correctCount}/10 Benar) • Ulangi level untuk membuka lencana`;
+            if (elements.resultHeadlineBold) {
+                elements.resultHeadlineBold.textContent = `Tetap Semangat! Belum Lulus (Minimal 80 Poin) 📚`;
+            }
+            if (elements.resultBadgeStatusTitle) {
+                elements.resultBadgeStatusTitle.textContent = `Belum Lulus (Butuh Min. 80 Poin)`;
+                elements.resultBadgeStatusTitle.style.color = '#dc2626';
+            }
+            if (elements.resultBadgeScorePill) {
+                elements.resultBadgeScorePill.textContent = `Skor: ${state.score}/100 (${state.correctCount}/10 Benar) • Ulangi level untuk membuka lencana`;
+            }
 
-            elements.btnResultNextLevel.classList.add('hidden');
+            if (elements.btnResultNextLevel) elements.btnResultNextLevel.classList.add('hidden');
         }
 
         // Stats boxes
@@ -1130,10 +1146,35 @@ document.addEventListener('DOMContentLoaded', () => {
         handleHeroPlayClick();
     });
 
+    // Cross-Device Leaderboard Sync Listeners & Triggers
+    window.addEventListener('demokrasiLeaderboardUpdated', () => {
+        if (elements.leaderboardModal && !elements.leaderboardModal.classList.contains('hidden')) {
+            renderLeaderboard();
+        }
+        if (elements.resultTopRankVal && state.playerName) {
+            elements.resultTopRankVal.textContent = realtimeData.getTopRankingPercent(state.playerName, state.playerAbsen);
+        }
+    });
+
     // Initial Renders & Setup
     loadSavedPlayer();
     renderBadges();
     
+    // Background cloud sync on app start
+    realtimeData.syncCloud().catch(err => console.warn('[Leaderboard] Initial sync error:', err));
+
+    // Re-sync whenever user focuses back to the app on mobile or desktop
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            realtimeData.syncCloud().catch(err => console.warn('[Leaderboard] Visibility sync error:', err));
+        }
+    });
+
+    // Background heartbeat sync every 25 seconds
+    setInterval(() => {
+        realtimeData.syncCloud().catch(err => console.warn('[Leaderboard] Periodic sync error:', err));
+    }, 25000);
+
     // Autoplay background music
     sounds.playBgMusic();
 });

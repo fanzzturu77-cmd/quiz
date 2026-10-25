@@ -1580,7 +1580,11 @@ class RealtimeDataManager {
         return this.recordLevelGameResult(1, result);
     }
 
-    // --- Leaderboard ---
+    // --- Leaderboard & Cross-Device Cloud Sync ---
+    CLOUD_API_URL = 'https://api.restful-api.dev/objects/ff808181a09d98f701a17051048a01f0';
+    NETLIFY_API_URL = '/.netlify/functions/leaderboard';
+    _isSyncing = false;
+
     getLeaderboard() {
         const raw = localStorage.getItem(this.STORAGE_KEYS.LEADERBOARD);
         if (!raw) return [];
@@ -1593,6 +1597,164 @@ class RealtimeDataManager {
 
     saveLeaderboard(entries) {
         localStorage.setItem(this.STORAGE_KEYS.LEADERBOARD, JSON.stringify(entries));
+        try {
+            window.dispatchEvent(new CustomEvent('demokrasiLeaderboardUpdated', { detail: { entries } }));
+        } catch(e) {}
+    }
+
+    // Deduplicate and merge remote scores with local scores across all devices
+    mergeLeaderboards(localEntries = [], remoteEntries = []) {
+        const map = new Map();
+
+        const processEntry = (e) => {
+            if (!e || !e.name) return;
+            const pName = (e.name || '').trim();
+            const pAbsen = e.absen || '-';
+            const key = e.key || `${pName.toLowerCase()}_${pAbsen}`;
+            const existing = map.get(key);
+
+            const score = Number(e.score) || 0;
+            const correctCount = Number(e.correctCount) || 0;
+            const totalQuestions = Number(e.totalQuestions) || 10;
+            const highestLevel = Number(e.highestLevel) || 1;
+            const gamesPlayed = Number(e.gamesPlayed) || 1;
+            const lastPlayed = e.lastPlayed || new Date().toISOString();
+
+            if (!existing) {
+                map.set(key, {
+                    key: key,
+                    name: pName,
+                    absen: pAbsen,
+                    score: score,
+                    correctCount: correctCount,
+                    totalQuestions: totalQuestions,
+                    highestLevel: highestLevel,
+                    gamesPlayed: gamesPlayed,
+                    lastPlayed: lastPlayed
+                });
+            } else {
+                if (score > existing.score) {
+                    existing.score = score;
+                    existing.correctCount = correctCount;
+                    existing.totalQuestions = totalQuestions;
+                    existing.lastPlayed = lastPlayed;
+                }
+                existing.highestLevel = Math.max(existing.highestLevel, highestLevel);
+                existing.gamesPlayed = Math.max(existing.gamesPlayed, gamesPlayed);
+            }
+        };
+
+        (remoteEntries || []).forEach(processEntry);
+        (localEntries || []).forEach(processEntry);
+
+        const merged = Array.from(map.values());
+        merged.sort((a, b) => {
+            if (b.score !== a.score) return b.score - a.score;
+            return b.correctCount - a.correctCount;
+        });
+
+        return merged.slice(0, 50);
+    }
+
+    // Fetch cloud leaderboard from Netlify or direct REST endpoint
+    async fetchCloudLeaderboard() {
+        // 1. Try Netlify Serverless Function if hosted on Netlify
+        try {
+            const netlifyRes = await fetch(this.NETLIFY_API_URL, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' }
+            });
+            if (netlifyRes.ok) {
+                const data = await netlifyRes.json();
+                if (data && Array.isArray(data.entries)) {
+                    return data.entries;
+                }
+            }
+        } catch (e) {
+            // Netlify endpoint unavailable or not running on Netlify server
+        }
+
+        // 2. Direct Cloud REST API
+        try {
+            const cloudRes = await fetch(this.CLOUD_API_URL, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' }
+            });
+            if (cloudRes.ok) {
+                const cloudJson = await cloudRes.json();
+                const entries = cloudJson?.data?.entries;
+                if (Array.isArray(entries)) {
+                    return entries;
+                }
+            }
+        } catch (e) {
+            console.warn('[Leaderboard] Cloud fetch fallback error:', e);
+        }
+
+        return null;
+    }
+
+    // Push updated leaderboard to cloud storage
+    async pushCloudLeaderboard(entries) {
+        const payload = {
+            name: "Demokrasi Leaderboard",
+            data: {
+                entries: entries,
+                lastUpdated: new Date().toISOString()
+            }
+        };
+
+        // 1. Send to Direct Cloud REST API (works across all browsers/devices)
+        try {
+            await fetch(this.CLOUD_API_URL, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+        } catch (e) {
+            console.warn('[Leaderboard] Direct Cloud push error:', e);
+        }
+
+        // 2. Also send to Netlify function if available
+        try {
+            await fetch(this.NETLIFY_API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ entries })
+            });
+        } catch (e) {
+            // silent ignore
+        }
+    }
+
+    // Bidirectional sync between local device and cloud
+    async syncCloud() {
+        if (this._isSyncing) return this.getLeaderboard();
+        this._isSyncing = true;
+
+        try {
+            const remoteEntries = await this.fetchCloudLeaderboard();
+            if (remoteEntries !== null) {
+                const localEntries = this.getLeaderboard();
+                const merged = this.mergeLeaderboards(localEntries, remoteEntries);
+
+                // If merged has updates or remote differs, push to cloud
+                const remoteStr = JSON.stringify(remoteEntries);
+                const mergedStr = JSON.stringify(merged);
+                if (remoteStr !== mergedStr) {
+                    await this.pushCloudLeaderboard(merged);
+                }
+
+                this.saveLeaderboard(merged);
+                return merged;
+            }
+        } catch (e) {
+            console.warn('[Leaderboard] syncCloud error:', e);
+        } finally {
+            this._isSyncing = false;
+        }
+
+        return this.getLeaderboard();
     }
 
     updateLeaderboard(playerName, playerAbsen, score, correctCount, totalQuestions, levelId = 1) {
@@ -1605,7 +1767,6 @@ class RealtimeDataManager {
 
         if (existingIdx >= 0) {
             const existing = entries[existingIdx];
-            // Cumulative or highest score
             if (score > existing.score) {
                 existing.score = score;
                 existing.correctCount = correctCount;
@@ -1636,6 +1797,10 @@ class RealtimeDataManager {
 
         entries = entries.slice(0, 50);
         this.saveLeaderboard(entries);
+
+        // Instantly push to cloud in background so other devices and phones receive it in realtime!
+        this.syncCloud().catch(err => console.warn('[Leaderboard] Background cloud sync error:', err));
+
         return entries;
     }
 

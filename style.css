@@ -1252,18 +1252,24 @@ html, body {
 /* ==========================================================================
    QUIZ RESULT OVERLAY (EXACT MATCH TO PHOTO 1)
    ========================================================================== */
+/* ==========================================================================
+   QUIZ RESULT OVERLAY (EXACT MATCH TO PHOTO 2)
+   ========================================================================== */
 .result-overlay {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: #0c4a9e; /* Solid Dark Royal Navy background matching Photo 1 */
-    z-index: 150;
+    width: 100vw;
+    height: 100vh;
+    background: #0b4aa0; /* Dark Royal Blue background matching Photo 2 */
+    z-index: 9999;
     display: flex;
     flex-direction: column;
     animation: fadeIn 0.3s ease;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .result-overlay.hidden {
@@ -1275,51 +1281,55 @@ html, body {
     min-height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: calc(24px + env(safe-area-inset-top, 0px)) 16px 24px 16px;
-    max-width: var(--max-app-width);
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(36px + env(safe-area-inset-bottom, 0px)) 16px;
+    max-width: 420px;
     margin: 0 auto;
 }
 
-/* Top Celebration Header (Matches Photo 1) */
+/* Top Celebration Header (Matches Photo 2) */
 .result-top-banner {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 2px;
+    width: 100%;
 }
 
 .result-celebrate-title {
     font-family: var(--font-heading);
-    font-size: 1.35rem;
+    font-size: 1.2rem;
     font-weight: 800;
     color: #ffffff;
-    line-height: 1.3;
+    line-height: 1.35;
     letter-spacing: -0.2px;
     max-width: 320px;
     margin: 0 auto;
 }
 
-/* Main Sky Card (Matches Photo 1: Soft sky cloud background, large rounded corners) */
+/* Main Sky Card (Matches Photo 2: Soft sky blue rounded card) */
 .result-sky-card {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(224, 242, 254, 0.75) 100%),
-                url('images/clouds_bg.webp') center 22% / cover no-repeat;
-    border-radius: 36px;
-    padding: 24px 16px 20px 16px;
-    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.28), inset 0 1px 2px rgba(255, 255, 255, 0.9);
+    background: linear-gradient(180deg, #bfe3fc 0%, #d8efff 55%, #eef8ff 100%),
+                url('images/clouds_bg.webp') center 20% / cover no-repeat;
+    border-radius: 28px;
+    padding: 16px 14px 16px 14px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28), inset 0 1px 2px rgba(255, 255, 255, 0.9);
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     position: relative;
-    border: 1.5px solid rgba(255, 255, 255, 0.9);
-    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    width: 100%;
+    max-width: 380px;
 }
 
-/* 3D Cute Penguin Mascot Showcase (Enlarged with transparent mascot & cloud aura) */
+/* 3D Cute Penguin Mascot Showcase (Compact & Balanced, Matches Photo 2) */
 .penguin-mascot-showcase {
     position: relative;
-    width: 210px;
-    height: 200px;
-    margin: -8px auto 12px auto;
+    width: 140px;
+    height: 130px;
+    margin: 0 auto 6px auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1327,78 +1337,77 @@ html, body {
 
 .mascot-sparkle-ambient {
     position: absolute;
-    width: 210px;
-    height: 200px;
+    width: 140px;
+    height: 130px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.85) 0%, rgba(255, 237, 74, 0.4) 45%, rgba(255, 255, 255, 0) 75%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(255, 237, 74, 0.35) 45%, rgba(255, 255, 255, 0) 75%);
     animation: pulseSparkle 2.5s infinite alternate;
 }
 
 @keyframes pulseSparkle {
     from { transform: scale(0.92); opacity: 0.65; }
-    to { transform: scale(1.18); opacity: 1; }
+    to { transform: scale(1.15); opacity: 1; }
 }
 
 .penguin-img {
-    width: 200px;
-    height: 195px;
+    width: 135px;
+    height: 125px;
     object-fit: contain;
     position: relative;
     z-index: 2;
-    filter: drop-shadow(0 14px 26px rgba(15, 23, 42, 0.25));
+    filter: drop-shadow(0 8px 18px rgba(15, 23, 42, 0.25));
     animation: floatMascot 3s ease-in-out infinite alternate;
 }
 
 @keyframes floatMascot {
     from { transform: translateY(0); }
-    to { transform: translateY(-10px); }
+    to { transform: translateY(-6px); }
 }
 
-/* Big Catchy Headline (Matches Photo 1) */
+/* Big Catchy Headline (Matches Photo 2) */
 .result-headline-bold {
     font-family: var(--font-heading);
-    font-size: 1.35rem;
-    font-weight: 900;
+    font-size: 1.15rem;
+    font-weight: 800;
     color: #0f172a;
-    line-height: 1.25;
-    margin-bottom: 20px;
-    max-width: 290px;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    max-width: 320px;
 }
 
-/* 4-Box Stats Grid (Matches Photo 1: 2 Columns x 2 Rows) */
+/* 4-Box Stats Grid (Matches Photo 2: 2 Columns x 2 Rows) */
 .result-stats-4grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
     width: 100%;
-    margin-bottom: 16px;
 }
 
 .result-metric-card {
     background: #ffffff;
-    border-radius: 20px;
-    padding: 14px 16px;
+    border-radius: 16px;
+    padding: 10px 12px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.9);
 }
 
 .metric-top-row {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
+    gap: 6px;
+    margin-bottom: 2px;
 }
 
 .metric-icon {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
 }
 
 .metric-number {
     font-family: var(--font-heading);
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     font-weight: 900;
     color: #0f172a;
     line-height: 1;
@@ -1410,35 +1419,24 @@ html, body {
     color: #64748b;
 }
 
-/* Student Info Tag */
-.result-student-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(255, 255, 255, 0.85);
-    padding: 5px 12px;
-    border-radius: 99px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: #0c4a9e;
-    margin-bottom: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-/* Journey Date Footer (Matches Photo 1) */
+/* Journey Date Footer on Dark Blue (Matches Photo 2) */
 .result-journey-date {
-    font-size: 0.75rem;
+    font-size: 0.78rem;
     font-weight: 700;
-    color: #0369a1;
-    margin-top: 4px;
+    color: #bfdbfe;
+    text-align: center;
+    margin-top: 2px;
+    width: 100%;
 }
 
-/* White Bottom Share Button (Matches Photo 1) */
+/* White Bottom Share Button (Matches Photo 2) */
 .result-bottom-action {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 8px;
+    width: 100%;
+    max-width: 380px;
+    margin-top: 2px;
     position: relative;
     z-index: 50;
     pointer-events: auto;
@@ -1446,15 +1444,15 @@ html, body {
 
 .btn-share-results {
     width: 100%;
-    padding: 16px;
+    padding: 14px;
     background: #ffffff;
     color: #0c4a9e;
     border: none;
     border-radius: var(--radius-pill);
     font-family: var(--font-heading);
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 900;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.6px;
     cursor: pointer;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -1474,23 +1472,24 @@ html, body {
 
 .result-secondary-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
     position: relative;
     z-index: 51;
     pointer-events: auto;
 }
 
 .btn-result-action-sub {
-    padding: 10px;
+    padding: 8px 6px;
     border-radius: var(--radius-pill);
-    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
     background: rgba(255, 255, 255, 0.12);
     color: #ffffff;
     font-family: var(--font-heading);
-    font-size: 0.82rem;
+    font-size: 0.76rem;
     font-weight: 800;
     cursor: pointer;
+    text-align: center;
     transition: background 0.15s ease, transform 0.15s ease;
     pointer-events: auto !important;
 }
@@ -2415,80 +2414,8 @@ html, body {
     cursor: not-allowed;
 }
 
-/* ==========================================================================
-   RESULT OVERLAY: LEVEL BADGE EARNED SHOWCASE
-   ========================================================================== */
-.result-badge-earned-box {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 2px solid rgba(255, 255, 255, 0.8);
-    border-radius: 20px;
-    padding: 14px 18px;
-    margin: 14px 0 16px 0;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-    backdrop-filter: blur(8px);
-}
-
-.result-badge-img-wrap {
-    width: 64px;
-    height: 64px;
-    flex-shrink: 0;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #fef08a, #facc15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 6px 16px rgba(250, 204, 21, 0.4);
-    animation: badgeFloat 3s ease-in-out infinite alternate;
-}
-
-@keyframes badgeFloat {
-    0% { transform: translateY(0px) rotate(0deg); }
-    100% { transform: translateY(-4px) rotate(3deg); }
-}
-
-.result-badge-img {
-    width: 52px;
-    height: 52px;
-    object-fit: contain;
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
-}
-
-.result-badge-details {
-    flex: 1;
-    text-align: left;
-}
-
-.result-badge-level-chip {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 800;
-    text-transform: uppercase;
-    color: #1e3a8a;
-    background: #dbeafe;
-    padding: 2px 8px;
-    border-radius: 12px;
-    margin-bottom: 4px;
-}
-
-.result-badge-status-title {
-    font-size: 16px;
-    font-weight: 800;
-    color: #0f172a;
-    margin-bottom: 4px;
-    line-height: 1.2;
-}
-
-.result-badge-score-pill {
-    font-size: 12px;
-    font-weight: 700;
-    color: #475569;
-}
-
 .result-next-level-btn {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     background: linear-gradient(135deg, #10b981, #059669) !important;
     box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35) !important;
 }
